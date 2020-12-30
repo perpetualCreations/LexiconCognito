@@ -7,9 +7,19 @@ Flask server module.
 from flask import Flask, render_template
 from configparser import ConfigParser
 from ast import literal_eval
+from os import getcwd
+from dbmanage import database
 
 config = ConfigParser()
 config.read("main.cfg")
+
+dbmanage = database(getcwd() + "/main.db")
+
+if config["CORE"]["WAS_DATABASE_GENERATED"] is False:
+   dbmanage.generate(getcwd() + "/schema.sql")
+   config["CORE"]["WAS_DATABASE_GENERATED"] = "True"
+   with open("main.cfg", "wb") as config_dump:
+      config.write(config_dump)
 
 app = Flask(__name__)
 
@@ -33,8 +43,41 @@ def upload():
 def tags():
    """
    Render tags.html, to show tag management menu.
-   :return:
+   :return: Tags page.
    """
+   return render_template("tags.html", serverid = config["CORE"]["ID"])
+
+@app.route("/profiles/")
+def profiles():
+   """
+   Render profiles.html, to show publisher, source/distributor, and author entity management menu.
+   :return: Profiles page.
+   """
+   return render_template("profiles.html", serverid = config["CORE"]["ID"])
+
+@app.route("/settings/")
+def settings():
+   """
+   Render settings.html, to show settings menu.
+   :return: Settings page.
+   """
+   return render_template("settings.html", serverid = config["CORE"]["ID"])
+
+@app.route("/content/")
+def content():
+   """
+   Render content.html, to show repository content such as documents and media.
+   :return: Contents page.
+   """
+   return render_template("content.html", serverid = config["CORE"]["ID"])
+
+@app.route("/search/")
+def search():
+   """
+   Render searchresults.html, to show results of repository search.
+   :return: Results page.
+   """
+   return render_template("searchresults.html", serverid = config["CORE"]["ID"])
 
 if __name__ == "__main__":
    app.run(debug = literal_eval(config["CORE"]["DEBUG"]), port = int(config["NET"]["PORT"]))
