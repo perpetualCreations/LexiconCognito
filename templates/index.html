@@ -10,23 +10,6 @@
             body {
                 margin-left: 2%;
                 }
-            .row {
-                margin: 10px -8px;
-                }
-            .row,
-            .row > .column {
-                padding: 8px;
-                }
-            .column {
-                float: left;
-                width: 32.22%;
-                align-content: center;
-                }
-            .row:after {
-                content: "";
-                display: table;
-                clear: both;
-                }
             @media screen and (max-width: 900px) {
                   .column {
                     width: 50%;
@@ -38,8 +21,29 @@
         <h1>Lexicon Cognito</h1>
         <h3>Server ID: {{ serverid }}</h3>
         <hr>
-        <div class = "grandsearch">
-
+        <div class = "grandsearch" style = "padding-top: 5%;padding-bottom: 5%;text-align: center;">
+            <form action = "{{ url_for('search') }}" method = "POST">
+                <h2>Search</h2>
+                <select name = "type" style = "background-color: rgb(45, 45, 45);color: white;border: none;height: 35px;padding-left: 5px;font-family: 'Montserrat', sans-serif;">
+                    <option value = "title">By Title</option>
+                    <option value = "author">By Author</option>
+                    <option value = "publisher">By Publisher</option>
+                    <option value = "distributor">By Distributor</option>
+                    <option value = "datepublished">By Date Published</option>
+                    <option value = "dateadded">By Date Added</option>
+                    <option value = "tag">By Tag</option>
+                </select>
+                <input type = "text" name = "term" required style = "background-color: rgb(45, 45, 45);color: white;border: none;height: 35px;width: 75%;padding-left: 8px;font-family: 'Montserrat', sans-serif;">
+                <input type = "submit" style = "background-color: rgb(40, 40, 40);color: white;border: none;height: 35px;font-family: 'Montserrat', sans-serif;">
+            </form>
+        </div>
+        <div style = "text-align: center;">
+            <div style = "padding-bottom: 1%;">
+                <a href = "{{ url_for('upload') }}" class = "button" style = "margin-right: 5px;margin-left: 5px;">Upload</a><a href = "{{ url_for('settings') }}" class = "button" style = "margin-right: 5px;">Settings</a><a href = "{{ url_for('random') }}" class = "button" style = "margin-right: 5px;">Random</a>
+            </div>
+            <div style = "padding-bottom: 10%;">
+                <a href = "{{ url_for('profiles') }}" class = "button" style = "margin-right: 5px;margin-left: 5px;">Manage Entities</a><a href = "{{ url_for('tags') }}" class = "button" style = "margin-right: 5px;">Manage Tags</a>
+            </div>
         </div>
         <p class= "footer-text">LEXICON COGNITO - REPOSITORY INDEX</p>
         <div class = "background" style = "background-image: url('{{ url_for('static', filename = 'background.png') }}');"></div>

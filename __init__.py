@@ -15,11 +15,13 @@ config.read("main.cfg")
 
 dbmanage = database(getcwd() + "/main.db")
 
-if config["CORE"]["WAS_DATABASE_GENERATED"] is False:
+"""
+if literal_eval(config["CORE"]["WAS_DATABASE_GENERATED"]) is False:
    dbmanage.generate(getcwd() + "/schema.sql")
    config["CORE"]["WAS_DATABASE_GENERATED"] = "True"
    with open("main.cfg", "wb") as config_dump:
       config.write(config_dump)
+"""
 
 app = Flask(__name__)
 
@@ -74,10 +76,21 @@ def content():
 @app.route("/search/")
 def search():
    """
-   Render searchresults.html, to show results of repository search.
-   :return: Results page.
+   Receive POST from client with search parameters.
+   :return:
    """
-   return render_template("searchresults.html", serverid = config["CORE"]["ID"])
+   if request.method == "POST":
+      search_type = request.form["type"]
+      search_term = request.form["term"]
+       # TODO db query
+
+@app.route("/random/")
+def random():
+   """
+   Load random content page.
+   :return: Random content page.
+   """
+
 
 if __name__ == "__main__":
    app.run(debug = literal_eval(config["CORE"]["DEBUG"]), port = int(config["NET"]["PORT"]))

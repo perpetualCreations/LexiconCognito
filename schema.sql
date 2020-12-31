@@ -32,7 +32,7 @@ CREATE TABLE item (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
   authors TEXT, -- Numeric integer IDs of authors, separated with spaces
-  date_digitalized TEXT NOT NULL, -- ISO8601 Format Dates, YYYY-MM-DD HH:MM:SS.SSS
+  date_added TEXT NOT NULL, -- ISO8601 Format Dates, YYYY-MM-DD HH:MM:SS.SSS
   date_published TEXT, -- ISO8601 Format Dates, YYYY-MM-DD HH:MM:SS.SSS
   notes TEXT,
   publisher INTEGER,
