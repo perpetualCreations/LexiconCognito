@@ -11,19 +11,17 @@ class database:
     """
     Class containing database management functions.
     """
-    def __init__(self, database_path):
+    def __init__(self):
         """
-        Initiation function for database class, connects to given database file.
-        :param database_path: str, path to database file
+        Initiation function for database class, connects to db file.
         """
-        self.manage = sqlite3.connect(database_path)
+        self.manage = sqlite3.connect("main.db")
 
-    def generate(self, schema_path):
+    def generate(self):
         """
         Generates tables for database. Should only be ran once.
-        :param schema_path: str, path to SQL schema
         """
-        self.manage.executescript(schema_path)
+        with open("schema.sql") as generate_script: self.manage.executescript(generate_script.read())
 
     def close(self):
         """

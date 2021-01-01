@@ -6,21 +6,21 @@ DROP TABLE IF EXISTS tags;
 
 CREATE TABLE author (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
   notes TEXT
 );
 
 CREATE TABLE publisher (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
-  notes TEXT,
+  notes TEXT
 );
 
 CREATE TABLE sourcedist ( -- This table is rather confusingly named, sourcedist refers to where the document was sourced from or distributed by
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   notes TEXT
-):
+);
 
 CREATE TABLE tags (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -38,6 +38,7 @@ CREATE TABLE item (
   publisher INTEGER,
   sourcedist INTEGER,
   tags TEXT, -- Tags separated with ', as a string, if document has a single tag, do not use any separators
+  path TEXT, -- String path to item
   FOREIGN KEY(publisher) REFERENCES publisher(id),
   FOREIGN KEY(sourcedist) REFERENCES sourcedist(id)
 );
