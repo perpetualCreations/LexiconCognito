@@ -87,7 +87,8 @@ def search():
         for raw_index in raw: items.append(raw[raw_index][0])
         items.sort()
 
-        if request.form["type"] == "tags" or request.form["type"] == "authors": pass # TODO special search for tags and authors
+        if request.form["type"] == "tags" or request.form["type"] == "authors": raise NotImplementedError # TODO special search for tags and authors, with lookups for numeric IDs
+        elif request.form["type"] == "publisher" or request.form["type"] == "distributor": raise NotImplementedError # TODO lookups for publishers and distributors, with numeric IDs
         else:
             keywords = split(request.form["term"])
             parsed = {}
@@ -100,8 +101,22 @@ def search():
                     parsed[items[items_index]] += 1
 
             results = sorted(parsed.items(), key = lambda x: x[1], reverse = True)
+            return redirect(url_for("search/results/" + request.form["type"] + "/" + request.form["term"] + "/"))
 
+    else:
+        abort(405)
 
+@app.route("/search/results/<search_type>/<search_term>/<int:pagenumber>/")
+def search_results(search_type, search_term, pagenumber):
+    """
+    Render searchresults.html, to display content query from /search/.
+    :param search_type: str, type of search
+    :param search_term: str, term searched for
+    :param pagenumber: str, result page to display, notated by number
+    :return:
+    """
+    if int(pagenumber) <= 0: pagenumber = "1"
+    return render_template("searchresults.html", serverid = config["CORE"]["ID"], searchterm = search_term, searchtype = search_type, page = pagenumber, next = str(int(pagenumber) + 1), previous = str(int(pagenumber) - 1))
 
 @app.route("/random/")
 def random():

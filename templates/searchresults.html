@@ -37,8 +37,17 @@
     <body>
         <h1>Lexicon Cognito</h1>
         <h3>Server ID: {{ serverid }}</h3>
-        <a class = "button">Return to Index</a>
         <hr>
+        <a class = "button" href = "{{ url_for('index') }}">Return to Index</a>
+        <hr>
+        <p>Search results for "{{ searchterm }}" by {{ searchtype }}.</p>
+        <hr>
+        <p>Page {{ page }}</p>
+        {% if page != "1" %}
+            <a class = "button" href = "{{ url_for('search_results', search_term = searchterm, search_type = searchtype, pagenumber = previous) }}">Previous</a><a class = "button" href = "{{ url_for('search_results', search_term = searchterm, search_type = searchtype, pagenumber = next) }}" style = "margin-left: 5px;">Next</a>
+        {% else %}
+            <a class = "button disabled">Previous</a><a class = "button" href = "{{ url_for('search_results', search_term = searchterm, search_type = searchtype, pagenumber = next) }}" style = "margin-left: 5px;">Next</a>
+        {% endif %}
         <p class= "footer-text">LEXICON COGNITO - SEARCH RESULTS</p>
         <div class = "background" style = "background-image: url('{{ url_for('static', filename = 'background.png') }}');"></div>
     </body>
