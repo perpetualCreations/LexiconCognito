@@ -78,43 +78,48 @@ def content():
 def search():
     """
     Receive POST from client with search parameters.
-    :return:
+    :return: redirects to searchresults.
     """
-    if request.method == "POST":
-        raw = dbmanage.manage.cursor().execute("SELECT " + request.form["type"] + " FROM item").fetchall()
-        items = []
-
-        for raw_index in raw: items.append(raw[raw_index][0])
-        items.sort()
-
-        if request.form["type"] == "tags" or request.form["type"] == "authors": raise NotImplementedError # TODO special search for tags and authors, with lookups for numeric IDs
-        elif request.form["type"] == "publisher" or request.form["type"] == "distributor": raise NotImplementedError # TODO lookups for publishers and distributors, with numeric IDs
-        else:
-            keywords = split(request.form["term"])
-            parsed = {}
-            for items_index in range(0, len(items)):
-                parsed[items[items_index]] = 0
-                for keywords_index in range(0, len(keywords)): # search method does not account for order of keywords
-                    if keywords[keywords_index].lower() in items[items_index].lower(): parsed[items[items_index]] += 1
-
-                if len(keywords) == parsed[items[items_index]]:
-                    parsed[items[items_index]] += 1
-
-            results = sorted(parsed.items(), key = lambda x: x[1], reverse = True)
-            return redirect(url_for("search/results/" + request.form["type"] + "/" + request.form["term"] + "/"))
-
-    else:
-        abort(405)
+    if request.method == "POST": return redirect(url_for("search/results/" + request.form["type"] + "/" + request.form["term"] + "/" + "1"))
+    else: abort(405)
 
 @app.route("/search/results/<search_type>/<search_term>/<int:pagenumber>/")
 def search_results(search_type, search_term, pagenumber):
     """
-    Render searchresults.html, to display content query from /search/.
+    Render searchresults.html, to display content and run query from /search/.
     :param search_type: str, type of search
     :param search_term: str, term searched for
     :param pagenumber: str, result page to display, notated by number
-    :return:
+    :return: searchresults page.
     """
+    raw = dbmanage.manage.cursor().execute("SELECT " + request.form["type"] + " FROM item").fetchall()
+    items = []
+
+    for raw_index in raw: items.append(raw[raw_index][0])
+    items.sort()
+
+    if request.form["type"] == "tags" or request.form["type"] == "authors":
+        raise NotImplementedError  # TODO special search for tags and authors, with lookups for numeric IDs
+    elif request.form["type"] == "publisher" or request.form["type"] == "distributor":
+        raise NotImplementedError  # TODO lookups for publishers and distributors, with numeric IDs
+    else:
+        keywords = split(request.form["term"])
+        parsed = {}
+        for items_index in range(0, len(items)):
+            parsed[items[items_index]] = 0
+            for keywords_index in range(0, len(keywords)):  # search method does not account for order of keywords
+                if keywords[keywords_index].lower() in items[items_index].lower(): parsed[items[items_index]] += 1
+
+            if len(keywords) == parsed[items[items_index]]: parsed[items[items_index]] += 1
+
+        results = sorted(parsed.items(), key = lambda x: x[1], reverse = True)
+
+        fill = dbmanage.manage.cursor().execute("SELECT * FROM item").fetchall()
+
+        for convert_index in range(0, len(results)):
+            del results[reduce_index][1]
+            results[reduce_index][1] =
+
     if int(pagenumber) <= 0: pagenumber = "1"
     return render_template("searchresults.html", serverid = config["CORE"]["ID"], searchterm = search_term, searchtype = search_type, page = pagenumber, next = str(int(pagenumber) + 1), previous = str(int(pagenumber) - 1))
 

@@ -37,3 +37,30 @@ It lacks:
  - Access logging.
 
 These should be fixed immediately after release.
+
+#### File Support
+This project was originally intended as an e-library application, however the scope exponentially began increasing. 
+Technical debt however becomes less daunting as it is broken down.
+
+There are multiple standards for video, audio, PDFs and other document formats, code, and webpages.
+
+For video, the supported files are MP4 and MPEG-X. 
+There are many Javascript-based video players available, integrating a player will be trivial.
+The auxiliary metadata for the AUX field under the items table will contain length of video and resolution.
+
+For audio, the supported files are MP3, FLAC, and WAV. There is an exhaustive list of additional formats that will find implementation later.
+Alike to video, there are plenty of open media players that can be integrated and customized.
+The auxiliary metadata for the AUX field under the items table will contain length of audio. 
+
+For documents, the supported files are PDF, .DOCX, Markdown, LaTEX, rich-text and plain-text. 
+None of these are fun to implement! They all have their own gimmicks, and I'll need find or write viewers for all of them.
+
+For code, script files will be treated as regular plain-text files, with their own monospaced, dedicated font.
+Executables, installers, and software packages will not have viewers. Maybe add a hex viewer.
+The auxiliary metadata for the AUX field under the items table will contain language of the file.
+
+For webpages, well. They can be written as stand-alone HTML files, or be packaged as a directory with stylesheets and resources.
+The content can be viewed through an iframe.
+
+Hopefully after integrating these content types, support will be added for Git repositories and ZIP files.
+

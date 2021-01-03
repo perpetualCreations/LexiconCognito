@@ -39,6 +39,8 @@ CREATE TABLE item (
   sourcedist INTEGER,
   tags TEXT, -- Tags separated with ', as a string, if document has a single tag, do not use any separators
   path TEXT, -- String path to item
+  class TEXT, -- String naming item type, such as document, video, audio, etc.
+  aux TEXT,
   FOREIGN KEY(publisher) REFERENCES publisher(id),
   FOREIGN KEY(sourcedist) REFERENCES sourcedist(id)
 );

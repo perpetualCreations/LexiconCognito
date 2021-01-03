@@ -40,7 +40,20 @@
         <hr>
         <a class = "button" href = "{{ url_for('index') }}">Return to Index</a>
         <hr>
-        <p>Search results for "{{ searchterm }}" by {{ searchtype }}.</p>
+        <p style = "margin-bottom: 5px;">Search results for "{{ searchterm }}" by {{ searchtype }}.</p>
+        {% for item in items %}
+            <h4>{{ item[0] }}</h4> <!-- todo add icons and file type -->
+            <p>ID: {{ item[1] }}</p>
+            <p>Type: {{ item[2] }}</p>
+            <p>Author(s): {{ item[3] }}</p>
+            <p>Publisher: {{ item[4] }}</p>
+            <p>Source/Distributor: {{ item[5] }}</p>
+            <p>Tags: {{ item[6] }}</p>
+            <p>Date Added: {{ item[7] }}</p>
+            <p>Date Published: {{ item[8] }}</p>
+            <p>Path: {{ item[9] }}</p>
+            <hr>
+        {% endfor %}
         <hr>
         <p>Page {{ page }}</p>
         {% if page != "1" %}
