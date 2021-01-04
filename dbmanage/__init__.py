@@ -10,12 +10,13 @@ import sqlite3
 class database:
     """
     Class containing database management functions.
+    Do not use this class for non-sync or non-serial processing!
     """
     def __init__(self):
         """
         Initiation function for database class, connects to db file.
         """
-        self.manage = sqlite3.connect("main.db")
+        self.manage = sqlite3.connect("main.db", check_same_thread = False)
 
     def generate(self):
         """

@@ -4,10 +4,10 @@ LexiconCognito
 Flask server module.
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request, url_for
 from configparser import ConfigParser
 from ast import literal_eval
-from os import getcwd
+from os import getcwd, urandom
 from dbmanage import database
 
 config = ConfigParser()
@@ -24,6 +24,7 @@ if literal_eval(config["CORE"]["WAS_DATABASE_GENERATED"]) is False:
 """
 
 app = Flask(__name__)
+app.secret_key = urandom(4096)
 
 @app.route("/")
 def index():
@@ -74,14 +75,15 @@ def content():
     """
     return render_template("content.html", serverid = config["CORE"]["ID"])
 
-@app.route("/search/")
+@app.route("/search/", methods = ["POST"])
 def search():
     """
     Receive POST from client with search parameters.
     :return: redirects to searchresults.
     """
-    if request.method == "POST": return redirect(url_for("search/results/" + request.form["type"] + "/" + request.form["term"] + "/" + "1"))
-    else: abort(405)
+    if request.method == "POST": return redirect(url_for("search_results", search_type =  request.form["type"], search_term = request.form["term"], pagenumber = "1"))
+    else:
+        abort(405)
 
 @app.route("/search/results/<search_type>/<search_term>/<int:pagenumber>/")
 def search_results(search_type, search_term, pagenumber): # TODO parsing by date, tags, authors, publishers, and distributors
@@ -92,17 +94,24 @@ def search_results(search_type, search_term, pagenumber): # TODO parsing by date
     :param pagenumber: str, result page to display, notated by number
     :return: searchresults page.
     """
+    search_term = search_term.replace("+", " ").replace("%", " ")
+
     items = sorted(dbmanage.manage.cursor().execute("SELECT * FROM item").fetchall(), key = lambda x: x[1], reverse = True)
-    keywords = split(request.form["term"])
+
+    for tuple_to_list_index in range(0, len(items)): items[tuple_to_list_index] = list(items[tuple_to_list_index])
+
+    if " " in search_term: keywords = split(search_term)
+    else: keywords = search_term
+
     lookup = {"id":0, "title":1, "authors":2, "date_added":3, "date_published":4, "notes":5, "publisher":6, "sourcedist":7, "tags":8, "path":9, "class":10, "aux":11}
 
     for items_index in range(0, len(items)):
-        items[items_index][12] = 0
+        items[items_index].append(0)
         for keywords_index in range(0, len(keywords)):  # search method does not account for order of keywords
-            if keywords[keywords_index].lower() in items[items_index][lookup[request.form["type"]]].lower(): items[items_index][12] += 1
+            if keywords[keywords_index].lower() in items[items_index][lookup[search_type]].lower(): items[items_index][12] += 1
 
-        if len(keywords) == parsed[items[items_index]]: items[items_index][12] += 1
-        if request.form["term"].lower() in items[items_index][lookup[request.form["type"]]].lower(): items[items_index][12] += 1
+        if len(keywords) == items[items_index][lookup[search_type]]: items[items_index][12] += 1
+        if search_term.lower() in items[items_index][lookup[search_type]].lower(): items[items_index][12] += 1
 
         items = sorted(items, key = lambda x: x[12], reverse = True)
 
