@@ -42,17 +42,18 @@
         <hr>
         <p style = "margin-bottom: 5px;">Search results for "{{ searchterm }}" by {{ searchtype }}.</p>
         {% for item in items %}
-            <h4>{{ item[0] }}</h4> <!-- todo add icons and file type -->
-            <p>ID: {{ item[1] }}</p>
-            <p>Type: {{ item[2] }}</p>
-            <p>Author(s): {{ item[3] }}</p>
-            <p>Publisher: {{ item[4] }}</p>
-            <p>Source/Distributor: {{ item[5] }}</p>
-            <p>Tags: {{ item[6] }}</p>
-            <p>Date Added: {{ item[7] }}</p>
-            <p>Date Published: {{ item[8] }}</p>
-            <p>Path: {{ item[9] }}</p>
-            <hr>
+            <div class = "card" style = "width: 60%;">
+                <h4>{{ item[1] }}</h4> <!-- todo add icons and file type -->
+                <p>ID: {{ item[0] }}</p>
+                <p>Type: {{ item[10] }}</p>
+                <p>Author(s): {{ item[2] }}</p>
+                <p>Publisher: {{ item[6] }}</p>
+                <p>Source/Distributor: {{ item[7] }}</p>
+                <p>Tags: {{ item[8] }}</p>
+                <p>Date Added: {{ item[3] }}</p>
+                <p>Date Published: {{ item[4] }}</p>
+                <p>Path: {{ item[9] }}</p>
+            </div>
         {% endfor %}
         <hr>
         <p>Page {{ page }}</p>

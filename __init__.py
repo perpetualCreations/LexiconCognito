@@ -113,7 +113,7 @@ def search_results(search_type, search_term, pagenumber): # TODO parsing by date
         if len(keywords) == items[items_index][lookup[search_type]]: items[items_index][12] += 1
         if search_term.lower() in items[items_index][lookup[search_type]].lower(): items[items_index][12] += 1
 
-        items = sorted(items, key = lambda x: x[12], reverse = True)
+    items = sorted(items, key = lambda x: x[12], reverse = True)
 
     if int(pagenumber) <= 0: pagenumber = "1"
     return render_template("searchresults.html", serverid = config["CORE"]["ID"], searchterm = search_term, searchtype = search_type, page = pagenumber, next = str(int(pagenumber) + 1), previous = str(int(pagenumber) - 1), items = items)
