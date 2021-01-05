@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Lexicon Cognito - Search Results</title>
+        <title>Lexicon Cognito - Results for {{ searchterm }}</title>
         <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'main.css') }}">
         <style>
@@ -40,10 +40,13 @@
         <hr>
         <a class = "button" href = "{{ url_for('index') }}">Return to Index</a>
         <hr>
+        {% if "date" in searchtype %}
+        <p>Please format dates as specified in ISO8601, YYYY-MM-DD HH:MM:SS.SSS.</p>
+        {% endif %}
         <p style = "margin-bottom: 5px;">Search results for "{{ searchterm }}" by {{ searchtype }}.</p>
         {% for item in items %}
             <div class = "card" style = "width: 60%;">
-                <h4>{{ item[1] }}</h4> <!-- todo add icons and file type -->
+                <h4>{{ item[1] }}</h4> <!-- todo add icons -->
                 <p>ID: {{ item[0] }}</p>
                 <p>Type: {{ item[10] }}</p>
                 <p>Author(s): {{ item[2] }}</p>
@@ -56,12 +59,6 @@
             </div>
         {% endfor %}
         <hr>
-        <p>Page {{ page }}</p>
-        {% if page != "1" %}
-            <a class = "button" href = "{{ url_for('search_results', search_term = searchterm, search_type = searchtype, pagenumber = previous) }}">Previous</a><a class = "button" href = "{{ url_for('search_results', search_term = searchterm, search_type = searchtype, pagenumber = next) }}" style = "margin-left: 5px;">Next</a>
-        {% else %}
-            <a class = "button disabled">Previous</a><a class = "button" href = "{{ url_for('search_results', search_term = searchterm, search_type = searchtype, pagenumber = next) }}" style = "margin-left: 5px;">Next</a>
-        {% endif %}
         <p class= "footer-text">LEXICON COGNITO - SEARCH RESULTS</p>
         <div class = "background" style = "background-image: url('{{ url_for('static', filename = 'background.png') }}');"></div>
     </body>

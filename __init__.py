@@ -4,7 +4,7 @@ LexiconCognito
 Flask server module.
 """
 
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, abort
 from configparser import ConfigParser
 from ast import literal_eval
 from os import getcwd, urandom
@@ -34,6 +34,17 @@ def index():
     """
     return render_template("index.html", serverid = config["CORE"]["ID"])
     # TODO add page stats, page series for all items alphabetically
+
+@app.route("/upload/endpoint/", methods = ["POST"])
+def receive_upload():
+    """
+    Receive POST from client with file upload and entry parameters.
+    :return: UploadComplete page.
+    """
+    if request.method == "POST":
+        return render_template("uploadcomplete.html", serverid = config["CORE"]["ID"])
+    else:
+        abort(405)
 
 @app.route("/upload/")
 def upload():
@@ -81,12 +92,12 @@ def search():
     Receive POST from client with search parameters.
     :return: redirects to searchresults.
     """
-    if request.method == "POST": return redirect(url_for("search_results", search_type =  request.form["type"], search_term = request.form["term"], pagenumber = "1"))
+    if request.method == "POST": return redirect(url_for("search_results", search_type =  request.form["type"], search_term = request.form["term"]))
     else:
         abort(405)
 
-@app.route("/search/results/<search_type>/<search_term>/<int:pagenumber>/")
-def search_results(search_type, search_term, pagenumber): # TODO parsing by date, tags, authors, publishers, and distributors
+@app.route("/search/results/<search_type>/<search_term>/")
+def search_results(search_type, search_term): # TODO tags, authors, publishers, and distributors
     """
     Render searchresults.html, to display content and run query from /search/.
     :param search_type: str, type of search
@@ -95,6 +106,7 @@ def search_results(search_type, search_term, pagenumber): # TODO parsing by date
     :return: searchresults page.
     """
     search_term = search_term.replace("+", " ").replace("%", " ")
+    search_type = search_type.replace("_", " ")
 
     items = sorted(dbmanage.manage.cursor().execute("SELECT * FROM item").fetchall(), key = lambda x: x[1], reverse = True)
 
@@ -103,7 +115,7 @@ def search_results(search_type, search_term, pagenumber): # TODO parsing by date
     if " " in search_term: keywords = split(search_term)
     else: keywords = search_term
 
-    lookup = {"id":0, "title":1, "authors":2, "date_added":3, "date_published":4, "notes":5, "publisher":6, "sourcedist":7, "tags":8, "path":9, "class":10, "aux":11}
+    lookup = {"id":0, "title":1, "authors":2, "date added":3, "date published":4, "notes":5, "publisher":6, "sourcedist":7, "tags":8, "path":9, "class":10, "aux":11}
 
     for items_index in range(0, len(items)):
         items[items_index].append(0)
@@ -115,8 +127,7 @@ def search_results(search_type, search_term, pagenumber): # TODO parsing by date
 
     items = sorted(items, key = lambda x: x[12], reverse = True)
 
-    if int(pagenumber) <= 0: pagenumber = "1"
-    return render_template("searchresults.html", serverid = config["CORE"]["ID"], searchterm = search_term, searchtype = search_type, page = pagenumber, next = str(int(pagenumber) + 1), previous = str(int(pagenumber) - 1), items = items)
+    return render_template("searchresults.html", serverid = config["CORE"]["ID"], searchterm = search_term, searchtype = search_type, items = items)
 
 @app.route("/random/")
 def random():

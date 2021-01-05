@@ -37,7 +37,7 @@ CREATE TABLE item (
   notes TEXT,
   publisher INTEGER,
   sourcedist INTEGER,
-  tags TEXT, -- Tags separated with ', as a string, if document has a single tag, do not use any separators
+  tags TEXT, -- Number integer IDs of tags, separated with spaces
   path TEXT, -- String path to item
   class TEXT, -- String naming item type, such as document, video, audio, etc.
   aux TEXT,

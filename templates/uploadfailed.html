@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Lexicon Cognito - Upload</title>
+        <title>Lexicon Cognito - Upload Failed</title>
         <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'main.css') }}">
         <style>
@@ -38,26 +38,10 @@
         <h1>Lexicon Cognito</h1>
         <h3>Server ID: {{ serverid }}</h3>
         <hr>
-        <p></p>
-        <form action = "{{ url_for('receive_upload') }}" method = "POST">
-            <p>Select File:</p>
-            <input type = "file" name = "file" required>
-            <p>Title</p>
-            <input type = "text" name = "title" required>
-            <p>Authors</p>
-            <input type = "text" name = "authors">
-            <p>Publisher</p>
-            <input type = "text" name = "publisher">
-            <p>Source/Distributor</p>
-            <input type = "text" name = "sourcedist">
-            <p>Item Type</p>
-            <select name = "class" style = "padding-left: 5px;">
-
-            </select>
-
-            <input type = "submit">
-        </form>
-        <p class= "footer-text">LEXICON COGNITO - UPLOAD</p>
+        <p>Upload failed, with message:</p>
+        <p>{{ errormessage }}</p>
+        <a class = "button" href = "{{ url_for('index') }}">Return to Index</a><a class = "button" href = "{{ url_for('upload') }}">Upload Again</a>
+        <p class= "footer-text">LEXICON COGNITO - UPLOAD FAILED</p>
         <div class = "background" style = "background-image: url('{{ url_for('static', filename = 'background.png') }}');"></div>
     </body>
 </html>

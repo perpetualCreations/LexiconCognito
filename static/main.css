@@ -6,4 +6,5 @@ Main CSS Document
 /* texts config */h1, h2, h3, h4, h5, h6 {color: white;}p, a, li {color: whitesmoke;}
 /* graphical formats */.card {background-color: rgb(40, 40, 40);padding: 30px;margin-top: 20px;}
 /* button */.disabled {opacity: 0.6;cursor: not-allowed;}.button {background-color: rgb(40, 40, 40);border: none;color: white;padding: 15px 36px;text-align: center;text-decoration: none;display: inline-block;font-size: 15px;width: auto;height: auto;}
+/* input */input {background-color: rgb(45, 45, 45);color: white;border: none;height: 35px;font-family: 'Montserrat', sans-serif;}select {background-color: rgb(45, 45, 45);color: white;border: none;height: 35px;font-family: 'Montserrat', sans-serif;}
 /* footer */.footer-text {font-size: 10px;color: white;}

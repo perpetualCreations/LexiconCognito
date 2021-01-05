@@ -23,6 +23,11 @@ When filling in the pre-drawn 1x10 grid of document slots, we use the given dyna
 
 Voilà, the result of an engineer's depressing afterthought.
 
+Addendum:
+No more pages, infinite scroll was actually somehow easier.
+
+Please send help.
+
 #### Content
 Remember dynamic URLs? We're using them again, but now as /content/< numeric id>.  
 
